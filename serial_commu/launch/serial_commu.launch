@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="serial_commu" type="serial_read.py" name="serial_read" output="screen"/>
+</launch>

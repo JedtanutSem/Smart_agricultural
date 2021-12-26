@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="cira_data" type="cira_get_data.py" name="cira_data" output="screen"/>
+</launch>
