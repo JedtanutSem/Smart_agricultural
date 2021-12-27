@@ -2,4 +2,6 @@ ArmVS/
 mycobot_ros/
 visp_ros/
 moveo_ros/
+moveit_visual_tools/
+pluginlib/
 CMakeLists.txt
