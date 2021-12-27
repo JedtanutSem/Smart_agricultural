@@ -1,0 +1,127 @@
+{
+    "connections": [
+        {
+            "in_id": "{c7fb8c33-ab56-4419-b762-aa2dd187ded4}",
+            "in_index": 0,
+            "out_id": "{47fb3fd4-7a03-4201-8887-73efd03f48c8}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{371273f5-7388-4639-819f-b081a9873b71}",
+            "in_index": 0,
+            "out_id": "{47fb3fd4-7a03-4201-8887-73efd03f48c8}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{583497b0-1e8f-4453-a588-4b174b258850}",
+            "in_index": 0,
+            "out_id": "{371273f5-7388-4639-819f-b081a9873b71}",
+            "out_index": 0
+        },
+        {
+            "in_id": "{47fb3fd4-7a03-4201-8887-73efd03f48c8}",
+            "in_index": 0,
+            "out_id": "{c7fb8c33-ab56-4419-b762-aa2dd187ded4}",
+            "out_index": 0
+        }
+    ],
+    "nodes": [
+        {
+            "id": "{371273f5-7388-4639-819f-b081a9873b71}",
+            "model": {
+                "jso": {
+                    "a": 0,
+                    "b": "sssssslo",
+                    "c": true
+                },
+                "name": "SetPayload",
+                "node_enable": true,
+                "payload_data": "\"a\":0,\n\"b\":\"sssssslo\",\n\"c\":true"
+            },
+            "ngo": {
+                "comment": {
+                    "data": "",
+                    "show": false
+                }
+            },
+            "position": {
+                "x": -135,
+                "y": -161
+            }
+        },
+        {
+            "id": "{47fb3fd4-7a03-4201-8887-73efd03f48c8}",
+            "model": {
+                "data": {
+                    "height": 353,
+                    "js_code": "",
+                    "widget_state": {
+                        "auto_indent": true,
+                        "auto_parent": true,
+                        "size": 11,
+                        "splt0": 278,
+                        "splt1": 69,
+                        "style": "Dracula",
+                        "widget_st_w": 0,
+                        "word_wrap": false
+                    },
+                    "width": 373
+                },
+                "name": "JavaScript",
+                "node_enable": true
+            },
+            "ngo": {
+                "comment": {
+                    "data": "",
+                    "show": false
+                }
+            },
+            "position": {
+                "x": -277,
+                "y": -163
+            }
+        },
+        {
+            "id": "{c7fb8c33-ab56-4419-b762-aa2dd187ded4}",
+            "model": {
+                "name": "AutoRun",
+                "node_enable": true
+            },
+            "ngo": {
+                "comment": {
+                    "data": "",
+                    "show": false
+                }
+            },
+            "position": {
+                "x": -443,
+                "y": -160
+            }
+        },
+        {
+            "id": "{583497b0-1e8f-4453-a588-4b174b258850}",
+            "model": {
+                "RosPub": {
+                    "topic_name": "from_cira"
+                },
+                "name": "RosPub",
+                "node_enable": true
+            },
+            "ngo": {
+                "comment": {
+                    "data": "",
+                    "show": false
+                }
+            },
+            "position": {
+                "x": -4,
+                "y": -161
+            }
+        }
+    ],
+    "scene_data": {
+        "flow_view_pos_x": 0,
+        "flow_view_pos_y": 0,
+        "flow_view_zoom_factor": 1
+    }
+}
