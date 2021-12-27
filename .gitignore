@@ -4,4 +4,6 @@ visp_ros/
 moveo_ros/
 moveit_visual_tools/
 pluginlib/
+robot_arm_simulator/
+geometry2/
 CMakeLists.txt
