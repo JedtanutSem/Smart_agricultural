@@ -6,4 +6,5 @@ moveit_visual_tools/
 pluginlib/
 robot_arm_simulator/
 geometry2/
+abb_irb1600id_support/
 CMakeLists.txt
