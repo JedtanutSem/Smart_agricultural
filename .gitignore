@@ -1,4 +1,5 @@
 ArmVS/
 mycobot_ros/
 visp_ros/
+moveo_ros/
 CMakeLists.txt
