@@ -8,6 +8,7 @@ get_a = 0
 get_b = 0
 get_c = 0
 get_d = 0
+#test
 
 def callback(data):
     global get_a,get_b,get_c,get_d
