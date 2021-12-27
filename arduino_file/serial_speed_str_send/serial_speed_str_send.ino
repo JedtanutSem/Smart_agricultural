@@ -51,7 +51,7 @@ void loop()
   Serial.print(x_send);
   Serial.print(",");
   Serial.print(z_send);
-  Serial.print(",");
+  //Serial.print(",");
   //Serial.print(x_val);
   //Serial.print(",");
   //Serial.print(z_val);
