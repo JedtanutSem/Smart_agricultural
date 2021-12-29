@@ -3,7 +3,7 @@ import serial
 messageStarted = 0
 dataBuffer= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 dataBufferIndex = 0
-#
+
 
 ser = serial.Serial(
     port='/dev/ttyACM0',\
