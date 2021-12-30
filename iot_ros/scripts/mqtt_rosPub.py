@@ -23,7 +23,7 @@ def vel_blk(vel):
     #rospy.loginfo(vel_x)
 
 
-rospy.init_node('mqtt_vel', anonymous = True)
+rospy.init_node('mqtt_vel_pub', anonymous = True)
 rospy.Subscriber('cmd_vel', Twist, vel_blk)
 rate = rospy.Rate(10)
 
