@@ -4,8 +4,8 @@ import time
 #import rospy
 i = 0
 B = 5
-host = "192.168.1.45"
-port = 8000
+host = "10.66.11.150"
+port = 1883
 client = mqtt.Client()
 client.connect(host)
 #data = "["Test"]"
