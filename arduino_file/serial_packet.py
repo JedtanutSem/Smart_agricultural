@@ -1,4 +1,4 @@
-import serial 
+import serial
 
 messageStarted = 0
 dataBuffer= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -13,29 +13,29 @@ ser = serial.Serial(
     bytesize=serial.EIGHTBITS,\
             timeout=0)    #init setup for --> 1.Serial port 2.baudrate etc.
 print("connected to: " + ser.portstr) #to check port connected
-    
+
 while True:
     if ser.in_waiting:  # Or: while ser.inWaiting(): --> wait for serial communication
         for c in ser.read():
-            
+
             byte_bit = bin(c)
-            #print(c)
+            ##print(c)
             read = c
            # print ser.readline()
         dataBuffer[dataBufferIndex] = read
         if not messageStarted:
-            
+
             dataBufferIndexIncrease = 1
             if dataBufferIndex > 1:
                 if dataBuffer[dataBufferIndex - 1] == 253 and dataBuffer[dataBufferIndex] == 255:
                     messageStarted = 1
                     dataBufferIndex = 0
                     dataBufferIndexIncrease = 0
-                        
+
             if(dataBufferIndexIncrease):
                 dataBufferIndex = dataBufferIndex + 1
         else:
-            
+
             if dataBufferIndex == 4:
                 sum = dataBuffer[4] | dataBuffer[5]<<8
                 data1 = dataBuffer[0] | dataBuffer[1]<<8
@@ -55,6 +55,3 @@ while True:
                     #print(str(dataBuffer[3]) + ' and ' + str(dataBuffer[4]) + ' and '+ str(dataBuffer[3]+dataBuffer[4]))
                 messageStarted = 0
             dataBufferIndex = dataBufferIndex + 1
-                
-
-            
