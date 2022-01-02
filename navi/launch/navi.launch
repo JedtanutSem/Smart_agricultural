@@ -1,0 +1,43 @@
+<launch>
+	<master auto="start"/>
+
+	<param name ="use_sim_time" value="false"/>
+	<arg name="move_forward_only" default="false"/>
+
+<!--- Start laser scan -->
+
+
+
+<!--- Start arduino python serial interface -->
+
+	<node pkg="serial_commu" type="serial_read.py" name="rosserial" respawn="true"/>
+
+<!--- Setup tramformation of laser_frame to base_link -->
+	<node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0.08 0 0.09 3.14 0 0  base_link laser_frame 100" />
+
+<!--- Run odometry setup node -->
+
+	<node pkg="odom" type="odom.py" name="odometryNode"   output="screen"/>
+
+<!--- Run the map server -->
+
+	<node  pkg="map_server" type="map_server" name="map_server"  args="$(find m2wr_description)/map/map_test/world_map.yaml"/>
+
+<!--- Run AMCL -->
+<!-- this will published tf relation from odom to map -->
+<include file="$(find amcl)/examples/amcl_diff.launch"/>
+
+<!--- Run move base -->
+
+	<node pkg="move_base" type="move_base" name="move_base" respawn="true"  output="screen">
+	<rosparam file="$(find navi)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find navi)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find navi)/config/local_costmap_params.yaml" command="load" />
+	<rosparam file="$(find navi)/config/global_costmap_params.yaml" command="load" />
+	<rosparam file="$(find navi)/config/move_base_params.yaml" command="load" />
+	<rosparam file="$(find navi)/config/teb_local_planner_params.yaml" command="load" />
+	<param name="TEBPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+	</node>
+
+
+</launch>
