@@ -14,24 +14,27 @@ def poseCLBK(data):
     homePose_dict_get = json.loads(json_acceptable_string)
 
     #rospy.loginfo(homePose_dict_get)
-
+    """
     x = homePose_dict_get['x_pose']
     y = homePose_dict_get['y_pose']
     w = homePose_dict_get['w_pose']
-    x = [x]
-    y = [y]
-    w = [w]
-    count = homePose_dict_get['count']
-    homePose_multi_dict = {"count":count,"x":x, "y":y, "w":w}
-    rospy.loginfo(homePose_multi_dict)
-    homePose = pd.DataFrame(homePose_multi_dict, columns= ['count','x','y','w'])
-    homePose.set_index('count', inplace = True)
-    if(count == 1):
-        homePose.to_csv('~/agri_ws/src/navigation_system/robot_system/log/homePose_multi.csv',mode='a', header=True,index=True)
-    elif(count>0):
-        homePose.to_csv('~/agri_ws/src/navigation_system/robot_system/log/homePose_multi.csv',mode='a', header=False,index=True)
-        
-
+    x = [0]
+    y = [0]
+    w = [0]
+    """
+    x = [0]
+    y = [0]
+    w = [0]
+    for count in range(32):
+        #count = homePose_dict_get['count']
+        homePose_multi_dict = {"count":count,"x":x, "y":y, "w":w}
+        rospy.loginfo(homePose_multi_dict)
+        homePose = pd.DataFrame(homePose_multi_dict, columns= ['count','x','y','w'])
+        homePose.set_index('count', inplace = True)
+        if(count == 1):
+            homePose.to_csv('~/agri_ws/src/navigation_system/robot_system/log/homePose_multi.csv',mode='a', header=False,index=True)
+        elif(count>0):
+            homePose.to_csv('~/agri_ws/src/navigation_system/robot_system/log/homePose_multi.csv',mode='a', header=False,index=True)
 
 def homePoseListen():
     global pub
