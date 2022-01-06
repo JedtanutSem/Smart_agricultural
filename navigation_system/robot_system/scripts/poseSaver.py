@@ -6,7 +6,7 @@ import rospy
 import json
 import os
 from std_msgs.msg import String
-from robot_system.msg import HomePose
+from robot_system.msg import Robotpose
 
 def poseCLBK(data):
     homePose_str = data.data
@@ -43,7 +43,7 @@ def homePoseListen():
     rospy.init_node('poseSaveCSV',anonymous = True)
     rospy.loginfo("Starting homePoseToCSV Node")
     rospy.Subscriber('/poseSaveSend', String, poseCLBK)
-    pub = rospy.Publisher('/homePoseSavedData',HomePose, queue_size=10)
+    pub = rospy.Publisher('/homePoseSavedData',Robotpose, queue_size=10)
     rospy.spin()
 
 if __name__ == "__main__":
