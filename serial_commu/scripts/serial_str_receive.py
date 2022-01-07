@@ -6,18 +6,18 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 import time
 import json
-max_linear_speed = 0.22
-max_angular_speed = 0.22
+max_linear_speed = 0.5
+max_angular_speed = 1
 
 if __name__ == "__main__":
 
-    arduino = serial.Serial('/dev/ttyACM0', 9600, timeout=.1)
+    arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=.1)
 
     #rospy.Subscriber('chatter', String, callback)
-    pub = rospy.Publisher('serial_read', String, queue_size=10)
-    pub_vel = rospy.Publisher('cmd_vel',Twist,queue_size=10)
+    pub = rospy.Publisher('serial_read', String, queue_size=1)
+    pub_vel = rospy.Publisher('cmd_vel',Twist,queue_size=1000)
     rospy.init_node('read_ser', anonymous=True)
-    rate = rospy.Rate(190) # 10hz
+    rate = rospy.Rate(200) # 10hz
 
     while not rospy.is_shutdown():
 
