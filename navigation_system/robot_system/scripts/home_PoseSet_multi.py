@@ -22,9 +22,9 @@ def poseCLBK(data):
     y = [0]
     w = [0]
     """
-    x = [0]
-    y = [0]
-    w = [0]
+    x = [0.0000]
+    y = [0.0000]
+    w = [0.0000]
     for count in range(32):
         #count = homePose_dict_get['count']
         homePose_multi_dict = {"count":count,"x":x, "y":y, "w":w}
