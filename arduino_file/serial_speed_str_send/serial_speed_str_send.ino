@@ -4,14 +4,14 @@ int x_val;
 int z_val;
 int x_send;
 int z_send;
- 
 
-void setup() 
+
+void setup()
 {
   Serial.begin(9600);
 }
 
-void loop() 
+void loop()
 {
   z_val = analogRead(x_anaPin);
   x_val = analogRead(y_anaPin);
@@ -25,28 +25,28 @@ void loop()
     x_send = map(x_val,520,1023,0,-100);
     //x_plus = 0;
   }
-  else 
+  else
   {
     x_send = 0;
    // x_plus = 0;
   }
-  
+
   if(z_val > 550)
   {
-    z_send = map(z_val,550,1023,0,100);
+    z_send = map(z_val,550,1023,0,-100);
     //z_plus = 1;
   }
   else if(z_val <500)
   {
-    z_send = map(z_val,520,0,0,-100);
+    z_send = map(z_val,520,0,0,100);
     //z_plus = 0;
   }
   else
   {
-    
+
     z_send = 0;
     //z_plus = 0;
-    
+
   }
   Serial.print(x_send);
   Serial.print(",");
@@ -56,5 +56,6 @@ void loop()
   //Serial.print(",");
   //Serial.print(z_val);
   Serial.println("");
+  delay(10);
 
 }
