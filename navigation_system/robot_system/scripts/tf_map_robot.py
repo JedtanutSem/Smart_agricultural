@@ -15,13 +15,19 @@ if __name__ == "__main__":
     rate = rospy.Rate(10)
     while not rospy.is_shutdown():
         try:
-            (trans,rot) = listener.lookupTransform('/map','/base_footprint',rospy.Time(0))
+            (trans,rot) = listener.lookupTransform('/home','/base_footprint',rospy.Time(0))
             (roll, pitch, yaw) = euler_from_quaternion (rot)
             angular = yaw * (180/math.pi)
 
             x =  trans[0]
             y = trans[1]
-            rospy.loginfo('x: '+ str(x)+ "  y: "+str(y)+ " ang: " + str(angular))
+            #rospy.loginfo('x: '+ str(x)+ "  y: "+str(y)+ " ang: " + str(angular))
+            msg = Robotpose()
+            msg.x_pose = x
+            msg.y_pose = y
+            msg.w_pose = angular
+            pose_pub.publish(msg)
+            #rospy.loginfo(msg)
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             continue
         rate.sleep()
