@@ -10,4 +10,4 @@ float64 x_rot
 float64 y_rot
 float64 z_rot
 float64 w_rot
-string fail_state
+string state
