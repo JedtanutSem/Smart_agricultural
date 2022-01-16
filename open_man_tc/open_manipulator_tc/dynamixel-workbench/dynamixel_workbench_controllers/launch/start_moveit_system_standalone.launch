@@ -1,0 +1,25 @@
+<launch>
+
+  <group ns="safe">
+
+    <rosparam command="load" file="$(find openmanipulator_safe_moveit)/config/joint_names.yaml"/>
+
+    <include file="$(find openmanipulator_safe_moveit)/launch/planning_context.launch" >
+      <arg name="load_robot_description" value="true" />
+    </include>
+
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <param name="/use_gui" value="false"/>
+      <rosparam param="/source_list">[/joint_states]</rosparam>
+    </node> -->
+
+    <include file="$(find openmanipulator_safe_moveit)/launch/move_group.launch">
+      <arg name="publish_monitored_planning_scene" value="true" />
+    </include>
+
+    <!-- <include file="$(find my_moveit_planner)/launch/move_group_interface_tutorial.launch">
+    </include> -->
+
+  </group>
+
+</launch>
