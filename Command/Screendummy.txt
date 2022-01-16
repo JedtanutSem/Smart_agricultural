@@ -1,0 +1,7 @@
+https://developpaper.com/linux-ubuntu-has-no-monitor-access-uses-virtual-display-and-remote-control/
+
+
+https://techoverflow.net/2019/02/23/how-to-run-x-server-using-xserver-xorg-video-dummy-driver-on-ubuntu/
+
+
+https://ubuntuhandbook.org/index.php/2017/04/custom-screen-resolution-ubuntu-desktop/
