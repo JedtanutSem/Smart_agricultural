@@ -14,7 +14,7 @@ import json
 #Parameters
 wheeltrack = 0.143 #distace measure of distance between wheel
 wheelradius = 0.0325
-TPR = 1000 #TPR --> Tick per revolution
+TPR = 27000 #TPR --> Tick per revolution
 left_ticks = 0
 right_ticks = 0
 last_left_ticks = 0
@@ -34,9 +34,9 @@ def encoder_callback(msg):
     ticks = msg.data
     ticks = ticks.split(",")
     left_ticks_str = ticks[0]
-    left_ticks = int(left_ticks_str)
+    left_ticks = float(left_ticks_str)
     right_ticks_str = ticks[1]
-    right_ticks = int(right_ticks_str)
+    right_ticks = float(right_ticks_str)
 
 
 rospy.init_node('odometry_publisher')

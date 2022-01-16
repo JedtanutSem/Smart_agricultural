@@ -8,24 +8,38 @@ import time
 import json
 max_linear_speed = 0.5
 max_angular_speed = 1
+vel_x = 0
+
+def vel_clbk(data):
+    global vel_x
+    vel_x = data.linear.x
+
+
+    #pass
 
 if __name__ == "__main__":
 
     arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=.1)
 
     #rospy.Subscriber('chatter', String, callback)
-    pub = rospy.Publisher('serial_read', String, queue_size=1)
-    pub_vel = rospy.Publisher('cmd_vel',Twist,queue_size=1000)
     rospy.init_node('read_ser', anonymous=True)
+    pub = rospy.Publisher('serial_read', String, queue_size=1)
+    pub_vel = rospy.Publisher('cmd_vel',Twist,queue_size=10)
+
+    rospy.Subscriber("cmd_vel",Twist, vel_clbk)
+    #rospy.loginfo("test")
+
     rate = rospy.Rate(200) # 10hz
 
     while not rospy.is_shutdown():
+        #ospy.loginfo("loop")
 
-        #str = '%s,%s\n' %(get_a,get_b)
+        str = '%s,%s,%s,%s,%s\n' %(2,2,2,2,vel_x)
         #rospy.loginfo(str)
-        #arduino.write(str)
+        arduino.write(str)
         data = arduino.readline()[:-2]
-
+        rospy.loginfo(data)
+# left,right
         if data:
             serial_str = data
             serial_split = serial_str.split(',')
@@ -44,7 +58,7 @@ if __name__ == "__main__":
                     msg = Twist()
                     msg.linear.x = x_linear_vel
                     msg.angular.z = z_angular_vel
-                    pub_vel.publish(msg)
+                    #pub_vel.publish(msg)
             except:
                 pass
 
