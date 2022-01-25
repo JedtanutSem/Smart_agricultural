@@ -1,1 +1,2 @@
 git checkout <branch>
+git branch -a
