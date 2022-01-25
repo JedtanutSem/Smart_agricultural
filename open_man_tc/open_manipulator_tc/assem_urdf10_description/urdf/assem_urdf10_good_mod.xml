@@ -1,6 +1,0 @@
-<robot file="assem_urdf10_good_mod.dae">
-        <Manipulator name="assem_urdf10_description">
-          <base>base_link</base>
-          <effector>grip_link</effector>
-        </Manipulator>
-</robot>
