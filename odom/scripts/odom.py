@@ -108,6 +108,6 @@ while not rospy.is_shutdown():
     odom_pub.publish(odom)
 
 
-    rospy.loginfo("left %d and right %d",left_ticks,right_ticks)
+    #rospy.loginfo("left %d and right %d",left_ticks,right_ticks)
     last_time = current_time
     r.sleep()
