@@ -3,6 +3,9 @@
 
 	<param name ="use_sim_time" value="false"/>
 	<arg name="move_forward_only" default="false"/>
+	<arg name="map_file" default="$(find turtlebot3_navigation)/maps/map.yaml"/>
+	<arg name="open_rviz" default="true"/>
+	
 
 <!--- Start laser scan -->
 
@@ -10,7 +13,7 @@
 
 <!--- Start arduino python serial interface -->
 
-	<node pkg="serial_commu" type="serial_read.py" name="rosserial" respawn="true"/>
+	<node pkg="serial_commu" type="serial_str_receive.py" name="ser" respawn="true"/>
 
 <!--- Setup tramformation of laser_frame to base_link -->
 	<node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0.08 0 0.09 3.14 0 0  base_link laser_frame 100" />
@@ -21,7 +24,7 @@
 
 <!--- Run the map server -->
 
-	<node  pkg="map_server" type="map_server" name="map_server"  args="$(find m2wr_description)/map/map_test/world_map.yaml"/>
+	<node  pkg="map_server" type="map_server" name="map_server"  args="$(arg map_file)"/>
 
 <!--- Run AMCL -->
 <!-- this will published tf relation from odom to map -->
@@ -38,6 +41,11 @@
 	<rosparam file="$(find navi)/config/teb_local_planner_params.yaml" command="load" />
 	<param name="TEBPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
 	</node>
+
+	<group if="$(arg open_rviz)">
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find navi)/rviz/navi_profile.rviz"/>
+  </group>
 
 
 </launch>
