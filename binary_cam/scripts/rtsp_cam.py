@@ -16,7 +16,9 @@ RTSP_URL = 'rtsp://192.168.1.3/live/ch00_0'
 
 os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'rtsp_transport;udp'
 
-cap = cv2.VideoCapture(RTSP_URL, cv2.CAP_FFMPEG)
+cap = cv2.VideoCapture(0)
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH,640)
+#cap.set(cv2.CAP_PROP_FRAME_WIDTH,480)
 
 if not cap.isOpened():
     print('Cannot open RTSP stream')

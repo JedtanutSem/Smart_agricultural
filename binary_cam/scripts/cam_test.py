@@ -52,10 +52,7 @@ class image_converter:
       #rospy.loginfo(thresh_cv)
       #cv_image = cv2.cvtColor(im_pillow, cv2.COLOR_GRAY2BGR)
 
-    cv_image = cv2.circle(cv_image, (140,140), 10, 255)#1
-    cv_image = cv2.circle(cv_image, (350,140), 12, 255)#2
-    cv_image = cv2.circle(cv_image, (140,350), 14, 255)#3
-    cv_image = cv2.circle(cv_image, (350,350), 16, 255)#4
+
     dimension = cv_image.shape
     rospy.loginfo(dimension)
 
@@ -64,12 +61,9 @@ class image_converter:
 
     try:
       self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))#mono8 for gray
-      pub = rospy.Publisher('/pixel_value',BinData,queue_size=10)
+      #pub = rospy.Publisher('/pixel_value',BinData,queue_size=10)
       #rate = rospy.Rate(100)
-      msg = BinData()
-      msg.white = number_of_white_pix
-      msg.black = number_of_black_pix
-      pub.publish(msg)
+
       #rate.sleep()
     except CvBridgeError as e:
       print(e)

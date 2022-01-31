@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
-
+"""
+For read log position from csv file (Cira core must send a number of position that save log)
+"""
 import rospy
 import json
 import pandas as pd

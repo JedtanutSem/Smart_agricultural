@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="robot_system" type="robot_gui.py" name="gui" output="screen"/>
+  <node pkg="robot_system" type="home_pose_saver_gui.py" name="save_pose_gui" output="screen" />
+</launch>

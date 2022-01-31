@@ -12,15 +12,8 @@ def poseCLBK(data):
     homePose_str = data.data
     json_acceptable_string = homePose_str.replace("'", "\"")
     homePose_dict_get = json.loads(json_acceptable_string)
-
-    #rospy.loginfo(homePose_dict_get)
     """
-    x = homePose_dict_get['x_pose']
-    y = homePose_dict_get['y_pose']
-    w = homePose_dict_get['w_pose']
-    x = [0]
-    y = [0]
-    w = [0]
+    Cira core send only trigger state for work with this function
     """
     x = [0]
     y = [0]
