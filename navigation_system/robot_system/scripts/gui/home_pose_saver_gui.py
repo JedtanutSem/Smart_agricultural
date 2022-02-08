@@ -10,7 +10,7 @@ import time
 
 def pose_save_gui_clbk(data):
     pose_saver_trig = 1
-    
+
     if(pose_saver_trig == 1):
         #rospy.loginfo(pose_count)
         path = "~/agri_ws/src/navigation_system/robot_system/log/poseSaver.csv"
@@ -40,6 +40,7 @@ def pose_save_gui_clbk(data):
 def pose_saver_gui():
     rospy.init_node("pose_saver_gui",anonymous =  True)
     rospy.Subscriber("/home_save_trig_gui", Gui_trig, pose_save_gui_clbk)
+    
     print("DDDDD")
     rospy.spin()
 

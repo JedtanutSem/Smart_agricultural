@@ -1,0 +1,26 @@
+<launch>
+  <param name="home_save_dir" type="str" value="$(find robot_system)/log/homeSave.csv"/>
+  <param name="pose_list_dir" type="str" value="$(find robot_system)/log/poseSaver.csv"/>
+
+  <include file="$(find turtlebot3_gazebo)/launch/turtlebot3_world.launch">
+    <arg name="model" value="burger"/>
+  </include>
+
+  <include file="$(find turtlebot3_navigation)/launch/turtlebot3_navigation.launch">
+    <arg name="model" value="burger"/>
+  </include>
+
+  <include file="$(find robot_system)/launch/tf_home.launch">
+
+  </include>
+
+
+  <node pkg="ieuagv_gui" type="gui_goal.py" name="gui_goal" output="screen"/>
+  <node pkg="robot_system" type="tf_map_robot.py" name="tf_home_robot" output="screen"/>
+  <node pkg="robot_system" type="PoseReader.py" name="PoseReader" output="screen"/>
+  <node pkg="robot_system" type="PoseSaverRos.py" name="PoseSaverRos" output="screen"/>
+
+  <node pkg="robot_system" type="Home_save.py" name="Home_save" output="screen"/>
+  <node pkg="robot_system" type="robot_gui.py" name="robot_gui"/>
+
+</launch>

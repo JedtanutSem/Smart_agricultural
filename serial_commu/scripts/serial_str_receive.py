@@ -32,11 +32,11 @@ if __name__ == "__main__":
         while not rospy.is_shutdown():
             #ospy.loginfo("loop")
 
-            str = '%s,%s,%s,%s,%s\n' %(2,2,2,2,vel_x)
+            str = '%s,%s,%s,%s,%s\n' %(25,2,2,2,vel_x)
             #rospy.loginfo(str)
             arduino.write(str)
             data = arduino.readline()[:-2]
-            rospy.loginfo(data)
+            rospy.loginfo(str)
     # left,right
             if data:
                 serial_str = data
@@ -64,5 +64,6 @@ if __name__ == "__main__":
                 pub.publish(serial_str)
     except:
         rospy.loginfo("Serial Fail")
+        print e
 
     rate.sleep()

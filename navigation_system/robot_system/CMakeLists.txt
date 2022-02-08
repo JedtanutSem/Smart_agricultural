@@ -52,6 +52,7 @@ add_message_files(
    FILES
    Robotpose.msg
    Gui_trig.msg
+   PID_Gui.msg
  )
 
 ## Generate services in the 'srv' folder

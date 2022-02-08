@@ -161,19 +161,19 @@ class Ui_MainWindow(object):
         goal.header.frame_id = "map"
 
         #self.yaw_pose = self.yaw_pose*(math.pi / 180)
-        #quatern_list = quaternion_from_euler(0, 0, self.yaw_pose)
+        quatern_list = quaternion_from_euler(0, 0, self.w)
 
 
-        goal.pose.position.x = self.x_trans
-        goal.pose.position.y = self.y_trans
-        goal.pose.position.z = self.z_trans
+        goal.pose.position.x = self.x
+        goal.pose.position.y = self.y
+        goal.pose.position.z = 0
 
 
         goal.pose.orientation.x = 0.0
         goal.pose.orientation.y = 0.0
-        goal.pose.orientation.z = self.z_rot
-        goal.pose.orientation.w = self.w_rot
-        rospy.loginfo(self.x_trans)
+        goal.pose.orientation.z = quatern_list[2]
+        goal.pose.orientation.w = quatern_list[3]
+        #rospy.loginfo(self.x_trans)
         #rospy.sleep(1)
         goal_publisher.publish(goal)
 
@@ -182,7 +182,7 @@ class Ui_MainWindow(object):
         rospy.Subscriber("amcl_pose", PoseWithCovarianceStamped, self.subscribe_data_pose)
         rospy.Subscriber("cmd_vel", Twist, self.subscribe_data_velocity)
         rospy.Subscriber('/pose_cira', String, self.clbk_goal)
-        rospy.Subscriber('/tf_map_home', Robotpose, self.clbk_tf)
+        rospy.Subscriber('/pose_goal_from_log', Robotpose, self.pose_goal_from_log)
 
     def clbk_goal(self,data):
 
@@ -196,17 +196,14 @@ class Ui_MainWindow(object):
 
         self.setGoal()
 
-    def clbk_tf(self,data):
+    def pose_goal_from_log(self,data):
 
 
-        self.x_trans = data.x_trans
-        self.y_trans = data.y_trans
-        self.z_trans = data.z_trans
+        self.x = data.x_pose
+        self.y = data.y_pose
+        self.w = data.w_pose
 
-        self.x_rot = data.x_rot
-        self.y_rot = data.y_rot
-        self.z_rot = data.z_rot
-        self.w_rot = data.w_rot
+
         #rospy.loginfo(self.x_trans)
         #q = quaternion_from_euler(1.5707, 0, -1.5707)
 
