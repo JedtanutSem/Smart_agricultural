@@ -142,6 +142,28 @@ class App:
         self.SaveHome.place(x=300,y=250,width=163,height=41)
         self.SaveHome["command"] = self.SaveHome_command
 
+        self.Fac_reset=tk.Button(root)
+        self.Fac_reset["activeforeground"] = "#6cb8f2"
+        self.Fac_reset["bg"] = "#ffffff"
+        self.ft = tkFont.Font(family='Times',size=13)
+        self.Fac_reset["font"] = ft
+        self.Fac_reset["fg"] = "#000000"
+        self.Fac_reset["justify"] = "center"
+        self.Fac_reset["text"] = "Fac RST"
+        self.Fac_reset.place(x=300,y=350,width=163,height=41)
+        self.Fac_reset["command"] = self.Fac_reset_command
+
+        self.SetHome=tk.Button(root)
+        self.SetHome["activeforeground"] = "#6cb8f2"
+        self.SetHome["bg"] = "#ffffff"
+        self.ft = tkFont.Font(family='Times',size=13)
+        self.SetHome["font"] = ft
+        self.SetHome["fg"] = "#000000"
+        self.SetHome["justify"] = "center"
+        self.SetHome["text"] = "Set Home"
+        self.SetHome.place(x=300,y=500,width=163,height=41)
+        self.SetHome["command"] = self.SetHome_command
+
 
 
 
@@ -179,6 +201,7 @@ class App:
 
 
 
+
     def vel_clbk(self,data):
         msg = data
         print(msg)
@@ -202,7 +225,20 @@ class App:
     def listen(self):
         rospy.Subscriber("/cmd_vel", Twist, self.vel_clbk)
         rospy.Subscriber("/save_map_state",String, self.save_map_state_clbk)
-        self.pub_home_save_trig = rospy.Publisher("/home_pose_trig",String,queue_size = 10)
+        self.pub_home_save_trig = rospy.Publisher("/save_home_trig",String,queue_size = 10)
+        self.pub_factory_reset_trig = rospy.Publisher("factory_reset_trig",String,queue_size = 10)
+        self.pub_set_home_trig = rospy.Publisher("set_home_trig",String,queue_size = 10)
+
+    def Fac_reset_command(self):
+        msg = String()
+        msg.data="1"
+        self.pub_factory_reset_trig.publish(msg)
+
+    def SetHome_command(self):
+        msg = String()
+        msg.data = "1"
+        self.pub_set_home_trig.publish(msg)
+
 
 
     def Text_INPUT_command(self):

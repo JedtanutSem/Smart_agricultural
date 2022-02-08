@@ -1,10 +1,13 @@
 <launch>
 
-  <param name="home_save_dir" type="str" value="$(find robot_system)/log/homeSave.csv"/>
+  <!--param name="home_save_dir" type="str" value="$(find robot_system)/log/homeSave.csv"/-->
   <param name="pose_list_dir" type="str" value="$(find robot_system)/log/poseSaver.csv"/>
-  <!--node pkg="robot_system" type="Home_save.py" name="Home_save" output="screen"/-->
-  <node pkg="robot_system" type="PoseReader.py" name="PoseReader" output="screen"/>
+  <param name="RTlog_save_dir" type="str" value="$(find robot_system)/log/RTlog.csv"/>
+  <param name="Home_log_dir" type="str" value="$(find robot_system)/log/homeSave.csv"/>
 
-  <node pkg="robot_system" type="robot_gui.py" name="robot_gui"/>
+  <node pkg="robot_system" type="Home_save_and_set.py" name="Home_save" output="screen"/>
+  <!--node pkg="robot_system" type="factory_reset.py" name="PoseReader" output="screen"/-->
+
+  <node pkg="robot_system" type="robot_gui.py" name="robot_gui" output="screen"/>
 
 </launch>

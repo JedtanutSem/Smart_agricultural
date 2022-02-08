@@ -12,7 +12,7 @@ if __name__ == "__main__":
     rospy.init_node("tf_robot")
     listener = tf.TransformListener()
     pose_pub = rospy.Publisher('robot/position',Robotpose,queue_size = 10)#Publish to PoseSaveRos
-    rate = rospy.Rate(10)
+    rate = rospy.Rate(1)
     while not rospy.is_shutdown():
         try:
             (trans,rot) = listener.lookupTransform('/map','/base_footprint',rospy.Time(0))
