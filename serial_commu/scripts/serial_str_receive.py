@@ -23,20 +23,19 @@ if __name__ == "__main__":
     pub = rospy.Publisher('serial_read', String, queue_size=1)
     pub_vel = rospy.Publisher('cmd_vel',Twist,queue_size=10)
     rospy.Subscriber("cmd_vel",Twist, vel_clbk)
-    rate = rospy.Rate(200) # 10hz
+    rate = rospy.Rate(150) # 10hz
     try:
-        arduino = serial.Serial('/dev/ttyUSB0', 9600, timeout=.1)
+        arduino = serial.Serial('/dev/ttyUSB0', 115200, timeout=.1)
         #rospy.Subscriber('chatter', String, callback)
         #rospy.loginfo("test")
 
         while not rospy.is_shutdown():
             #ospy.loginfo("loop")
-
-            str = '%s,%s,%s,%s,%s\n' %(25,2,2,2,vel_x)
+            #str = '%s,%s,%s,%s,%s\n' %(25,2,2,2,vel_x)
             #rospy.loginfo(str)
-            arduino.write(str)
+            #arduino.write(str)
             data = arduino.readline()[:-2]
-            rospy.loginfo(str)
+            #ospy.loginfo(str)
     # left,right
             if data:
                 serial_str = data
@@ -44,26 +43,26 @@ if __name__ == "__main__":
                 #rospy.loginfo(len(serial_split))
                 try:
                     if len(serial_split) == 2:
-                        x_linear_val = serial_split[0]
-                        x_linear_val = int(x_linear_val)
-                        x_linear_vel =  max_linear_speed * (x_linear_val / 100)
+                        L_count_str = serial_split[0]
+                        L_count_int = int(L_count_str)
+                        #x_linear_vel =  max_linear_speed * (x_linear_val / 100)
 
-                        z_angular_val = serial_split[1]
-                        z_angular_val = int(z_angular_val)
-                        z_angular_vel = max_angular_speed * (z_angular_val / 100)
-
-
+                        R_count_str = serial_split[0]
+                        R_count_int = int(R_count_str)
+                        #z_angular_vel = max_angular_speed * (z_angular_val / 100)
+#
+                        """
                         msg = Twist()
                         msg.linear.x = x_linear_vel
                         msg.angular.z = z_angular_vel
                         #pub_vel.publish(msg)
+                        """
                 except:
                     pass
 
                 rospy.loginfo(serial_str)
                 pub.publish(serial_str)
-    except:
+                rate.sleep()
+    except Exception as e:
         rospy.loginfo("Serial Fail")
         print e
-
-    rate.sleep()

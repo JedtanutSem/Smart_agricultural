@@ -50,7 +50,7 @@ class App:
         self.GLabel_857["font"] = ft
         self.GLabel_857["fg"] = "#333333"
         self.GLabel_857["justify"] = "center"
-        self.GLabel_857["text"] = "Smart Agricultural Robot System"
+        self.GLabel_857["text"] = "AMR"
         self.GLabel_857.place(x=70,y=40,width=513,height=30)
 
 

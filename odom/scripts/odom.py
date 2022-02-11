@@ -2,6 +2,7 @@
 
 import math
 from math import sin, cos, pi
+import serial
 
 import rospy
 import tf
@@ -12,13 +13,14 @@ import json
 
 
 #Parameters
-wheeltrack = 0.143 #distace measure of distance between wheel
-wheelradius = 0.0325
-TPR = 27000 #TPR --> Tick per revolution
-left_ticks = 0
-right_ticks = 0
-last_left_ticks = 0
-last_right_ticks = 0
+wheeltrack = 0.32 #distace measure of distance between wheel
+wheelradius = 0.06
+TPR = 520 #TPR --> Tick per revolution
+
+left_ticks = 32768
+right_ticks = 32768
+last_left_ticks = 32768
+last_right_ticks = 32768
 
 x = 0.0
 y = 0.0
@@ -47,19 +49,45 @@ odom_broadcaster = tf.TransformBroadcaster()
 current_time = rospy.Time.now()
 last_time = rospy.Time.now()
 
-r = rospy.Rate(150)
+
+r = rospy.Rate(50)
 
 while not rospy.is_shutdown():
+
+
+
     current_time = rospy.Time.now()
+    #print(left_ticks)
     delta_L = left_ticks - last_left_ticks
     delta_R = right_ticks - last_right_ticks
+    if(delta_L > 0):
+        if(delta_L > 1000):
+            delta_L = last_delta_L
+    if(delta_L < 0):
+        if(delta_L < -1000):
+            delta_L = last_delta_L
+    if(delta_R > 0):
+        if(delta_R > 1000):
+            delta_R = last_delta_R
+    if(delta_R < 0):
+        if(delta_R < -1000):
+            delta_R = last_delta_R
+
+    last_delta_L = delta_L
+    last_delta_R = delta_R
+    if(delta_L != 0 or delta_R!=0):
+        print('delta;L '+str(delta_L)+'    delta;R '+str(delta_R))
     last_left_ticks = left_ticks
     last_right_ticks = right_ticks
+    #global last_left_ticks
+    #global last_right_ticks
     dl = 2 * pi * wheelradius * delta_L / TPR # distance of left motor
+
     dr = 2 * pi * wheelradius * delta_R / TPR # distance of righr motor
     dc = (dl + dr) / 2 # center distance
     dt = (current_time - last_time).to_sec()
     dth = (dr-dl)/wheeltrack # angular distance (theta)
+
 
     if dr==dl: # when the robot doesn't has angular velocity
         dx=dr*cos(th)
@@ -70,12 +98,15 @@ while not rospy.is_shutdown():
         #<--calculate icc value-->
         iccX=x-radius*sin(th)
         iccY=y+radius*cos(th)
+        #dx = dc*cos(th+(dth/2))
+        #dx = dc*sin(th+(dth/2))
 
         dx = cos(dth) * (x-iccX) - sin(dth) * (y-iccY) + iccX - x
         dy = sin(dth) * (x-iccX) + cos(dt) * (y-iccY) + iccY - y
 
     x += dx
     y += dy
+    #print(dx)
     th =(th+dth) %  (2 * pi) # euler angle round z axis
 
     # <--Quaternion coordinate odom-->
