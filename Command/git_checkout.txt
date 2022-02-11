@@ -1,1 +1,4 @@
+git fetch --all
+git branch -r
+
 git checkout <branch>
