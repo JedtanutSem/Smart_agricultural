@@ -9,6 +9,7 @@ import tf
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Int16,String
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
+from std_msgs.msg import String
 import json
 
 
@@ -16,6 +17,11 @@ import json
 wheeltrack = 0.32 #distace measure of distance between wheel
 wheelradius = 0.06
 TPR = 520 #TPR --> Tick per revolution
+index_vl = 0
+index_vr = 0
+index_vx = 0
+index_vy = 0
+index_vth = 0
 
 left_ticks = 32768
 right_ticks = 32768
@@ -29,6 +35,14 @@ th = 0.0
 vx =  0.0
 vy =  0.0
 vth =  0.0
+
+vx_send = 0
+vy_send = 0
+vth_send = 0
+
+vl_send = 0
+vr_send = 0
+
 
 def encoder_callback(msg):
     global left_ticks
@@ -44,8 +58,8 @@ def encoder_callback(msg):
 rospy.init_node('odometry_publisher')
 odom_pub = rospy.Publisher("odom", Odometry, queue_size=50) # odom published
 encoder_sub =rospy.Subscriber("/serial_read", String, encoder_callback) # Encoder count from serial(Controller)
+wheel_vel_pub = rospy.Publisher("wheel_vel", String, queue_size = 50)
 odom_broadcaster = tf.TransformBroadcaster()
-
 current_time = rospy.Time.now()
 last_time = rospy.Time.now()
 
@@ -75,8 +89,8 @@ while not rospy.is_shutdown():
 
     last_delta_L = delta_L
     last_delta_R = delta_R
-    if(delta_L != 0 or delta_R!=0):
-        print('delta;L '+str(delta_L)+'    delta;R '+str(delta_R))
+    #if(delta_L != 0 or delta_R!=0):
+        #print('delta;L '+str(delta_L)+'    delta;R '+str(delta_R))
     last_left_ticks = left_ticks
     last_right_ticks = right_ticks
     #global last_left_ticks
@@ -134,7 +148,68 @@ while not rospy.is_shutdown():
        vth=dth/dt
 
     odom.child_frame_id = "base_link"
-    odom.twist.twist = Twist(Vector3(vx, vy, 0), Vector3(0, 0, vth))
+    if(vx!=0):
+        vx_send = vx
+        index_vx = 0
+    elif(vx==0):
+        index_vx = index_vx+1
+        if(index_vx == 10):
+            vx_send = 0
+
+    if(vy!=0):
+        vy_send = vy
+        index_vy = 0
+    elif(vy==0):
+        index_vy = index_vy+1
+        if(index_vy == 10):
+            vy_send = 0
+
+    if(vth!=0):
+        vth_send = vth
+        index_vth = 0
+    elif(vth==0):
+        index_vth = index_vth+1
+        if(index_vth == 10):
+            vth_send = 0
+    odom.twist.twist = Twist(Vector3(vx_send, vy_send, 0), Vector3(0, 0, vth_send))
+    vl = dl/dt
+    vr = dr/dt
+    #if(vl!=0 or vr!=0):
+        #print('v_L: '+str(vl)+'    v_RLL '+str(vr))
+    #if(vl == 0):
+        #print('v_L: '+str(vl)+'    v_RLL '+str(vr))
+    #print('v_L: '+str(vl)+'    v_R '+str(vr))
+    if(vl != 0):
+        vl_send = vl
+        #print('v_L: '+str(vl)+'    v_R '+str(vr))
+        index_vl = 0
+        #pass
+    elif(vl == 0):
+        index_vl = index_vl+1
+        if(index_vl == 10):
+            vl_send = vl
+            #print('v_L: '+str(0)+'    v_R '+str(0))
+            index_vl = 0
+
+
+    if(vr != 0):
+        vr_send = vr
+        #print('v_L: '+str(vl)+'    v_R '+str(vr))
+        index_vr = 0
+        #pass
+    elif(vr == 0):
+        index_vr = index_vr+1
+        if(index_vr == 10):
+            vr_send = vr
+            #print('v_L: '+str(0)+'    v_R '+str(0))
+            index_vr = 0
+    wheel_vel_msg = String()
+    wheel_vel_msg.data = "%s,%s" %(vl_send,vr_send)
+    #print(rospy.Time.now().to_sec())
+    print(wheel_vel_msg)
+    wheel_vel_pub.publish(wheel_vel_msg)
+
+
 
     odom_pub.publish(odom)
 

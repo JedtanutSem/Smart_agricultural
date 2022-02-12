@@ -3,12 +3,12 @@
    <arg name="open_rviz" default="true"/>
 
    <!-- slam_methods -->
-   <include file="$(find hector_slam)/launch/$(arg slam_methods)_slam.launch"/>
+   <include file="$(find robot_system)/launch/$(arg slam_methods)_slam.launch"/>
 
    <!-- rviz launch -->
    <group if="$(arg open_rviz)">
      <node pkg="rviz" type="rviz" name="rviz" required="true"
-           args="-d $(find hector_slam)/rviz/hector_slam.rviz"/>
+           args="-d $(find robot_system)/rviz/hector_slam.rviz"/>
    </group>
 
 </launch>
