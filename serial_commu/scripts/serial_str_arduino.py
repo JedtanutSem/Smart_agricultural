@@ -19,7 +19,7 @@ psoc_name               = 'PSoC'
 class Serial_commu:
     def __init__(self,ser_port_arduino='/dev/ttyUSB0', ser_port_psoc ='/dev/ttyACM0', baud_rate=9600, timeout=.1):
 
-        rospy.init_node('Serial_node', anonymous=10)
+        rospy.init_node('Serial_node', anonymous=True)
         print('\n\n------Serial node Start!!!------\n\n')
         rospy.Subscriber('pwm_to_controller', String, self.pwm_get_clbk)
         rospy.Subscriber('robot_state_data', Robot_state, self.robot_state_data_clbk)
