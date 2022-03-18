@@ -25,7 +25,7 @@ if __name__ == "__main__":
     rospy.Subscriber("cmd_vel",Twist, vel_clbk)
     rate = rospy.Rate(150) # 10hz
     try:
-        arduino = serial.Serial('/dev/ttyUSB1', 115200, timeout=.1)
+        arduino = serial.Serial('/dev/ttyUSB0', 115200, timeout=.1)
         #rospy.Subscriber('chatter', String, callback)
         #rospy.loginfo("test")
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
                 except:
                     pass
 
-                rospy.loginfo(serial_str)
+                #rospy.loginfo(serial_str)
                 pub.publish(serial_str)
                 rate.sleep()
     except Exception as e:

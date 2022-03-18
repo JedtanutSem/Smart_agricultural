@@ -76,7 +76,7 @@ if __name__ == "__main__":
                 except:
                     pass
 
-                rospy.loginfo(serial_str)
+                #rospy.loginfo(serial_str)
                 pub.publish(serial_str)
                 rate.sleep()
     except Exception as e:

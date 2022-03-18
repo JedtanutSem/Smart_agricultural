@@ -4,13 +4,14 @@ import time
 import rospy
 from std_msgs.msg import String
 from geometry_msgs.msg import Twist
+import json
 
 
 Raduis_wheel = 0.035
 
-kp = 65
-ki = 10
-kd = 0.02
+kp = 0
+ki = 0
+kd = 0
 past_time = 0
 current_time = 0
 
@@ -41,6 +42,18 @@ eprev_left = 0.0
 eintegral_right = 0.0
 eprev_right = 0.0
 
+
+def pid_val_clbk(data):
+    global kp,ki,kd
+    PID_str = data.data
+    json_acceptable_string = PID_str.replace("'", "\"")
+    PID_dict = json.loads(json_acceptable_string)
+    #print PID_dict
+
+    kp = float(PID_dict['kp'])
+    ki = float(PID_dict['ki'])
+    kd = float(PID_dict['kd'])
+
 def cmd_vel_clbk(data):
     global targetvelocity_left, targetvelocity_right
     vel_x = data.linear.x
@@ -55,12 +68,14 @@ def wheel_vel_clbk(data):
     msg_list = msg_str.split(',')
     current_velocity_left = float(msg_list[0])
     current_velocity_right = float(msg_list[1])
-    #print(msg_list)
+    #print(current_velocity_left)
 
 def pid(current_velocity,target_velocity,deltaT,position):
+    """
     global kp
     global ki
     global kd
+    """
 
     direction = 0
 
@@ -68,25 +83,33 @@ def pid(current_velocity,target_velocity,deltaT,position):
         global eintegral_left
         global eprev_left
 
-        e = current_velocity - target_velocity*2
+
+        #e = current_velocity - target_velocity
+        e = target_velocity - current_velocity
         #e = 0
 
         dedt = (e-eprev_left)/(deltaT)
 
         eintegral_left = eintegral_left + e*deltaT
 
-        #u = kp*e + kd*dedt + ki*eintegral_left
-        u = kp*e
+        u = kp*e + kd*dedt + ki*eintegral_left
+        #u = kp*e
         eprev_left = e
+        """
+        if(target_velocity == 0):
+            u = 0
+            eintegral_left = 0
+            """
         #print("left: "+str((current_velocity - target_velocity)))
-
+        #print(str(e)+' = ' + str(current_velocity)+' - '+ str(target_velocity))
+        print(str(u)+' = ' + str(kp*e)+' + '+ '('+str(ki)+'*'+str(eintegral_left))
         #print ('Left:  '+str(eintegral_left))
 
     if position == "right" :
         global eintegral_right
         global eprev_right
 
-        e = current_velocity - target_velocity*1.75
+        e = current_velocity - target_velocity
 
         dedt = (e-eprev_right)/(deltaT)
 
@@ -95,6 +118,7 @@ def pid(current_velocity,target_velocity,deltaT,position):
         u = kp*e + kd*dedt + ki*eintegral_right
 
         eintegral_right = e
+        u=0
         #print("right: "+str((current_velocity - target_velocity)))
         #u = 0
 
@@ -102,12 +126,13 @@ def pid(current_velocity,target_velocity,deltaT,position):
 
     #print('Left: '+ str(eintegral_left) + 'Right: '+str(en) )
     #print e
-    if u < 0 : direction = 1
-    if u < 10 and u > -10 :u = 0
+    if u > 0 : direction = 1
+    #if u < 10 and u > -10 :u = 0
     #print(u)
-    pwm = abs(u)
+    pwm = abs(0)
+    direction = 1
     if pwm > 255 : pwm = 255
-    #if pwm < 40 : pwm = 40
+    if pwm < 10  : pwm = 0
 
     return pwm,direction
 
@@ -119,12 +144,13 @@ if __name__ == "__main__":
     rospy.init_node('robot_vel_PID', anonymous=True)
     rospy.Subscriber('wheel_vel', String, wheel_vel_clbk)
     rospy.Subscriber('cmd_vel', Twist, cmd_vel_clbk)
+    rospy.Subscriber('/PID_val', String, pid_val_clbk)
     pub_pwm = rospy.Publisher('pwm_to_controller', String, queue_size = 10)
     current_time = rospy.Time.now().to_sec()
     past_time = rospy.Time.now().to_sec()
     loop_time = rospy.Time.now().to_sec()
-    print(current_time)
-    rate = rospy.Rate(50)
+    #print(current_time)
+    rate = rospy.Rate(10)
     while not rospy.is_shutdown():
         #recive_data
 
@@ -135,18 +161,18 @@ if __name__ == "__main__":
         past_time = current_time
 
         #if True :
-        if float(rospy.Time.now().to_sec()) - float(loop_time)  >= 0.1 : # 100ms
-            try:
-                pwm_left,direction_left = pid(current_velocity_left,targetvelocity_left,delta_time,"left")
-                pwm_right,direction_right = pid(current_velocity_right,targetvelocity_right,delta_time,"right")
-                pwm = str(pwm_left)+","+str(direction_left)+","+str(pwm_right)+","+str(direction_right)
-                print(pwm)
-                pwm_msg = String()
-                pwm_msg.data = pwm
-                pub_pwm.publish(pwm_msg)
-                #print(pwm_msg) # 0 => reverse ;  1 => forward
-                #print(delta_time)
-                loop_time = rospy.Time.now().to_sec()
-            except Exception as e:
-                print(e)
+
+        try:
+            pwm_left,direction_left = pid(current_velocity_left,targetvelocity_left,delta_time,"left")
+            pwm_right,direction_right = pid(current_velocity_right,targetvelocity_right,delta_time,"right")
+            pwm = str(pwm_left)+","+str(direction_left)+","+str(pwm_right)+","+str(direction_right)
+            #print(pwm)
+            pwm_msg = String()
+            pwm_msg.data = pwm
+            pub_pwm.publish(pwm_msg)
+            #print(pwm_msg) # 0 => reverse ;  1 => forward
+            #print(delta_time)
+            loop_time = rospy.Time.now().to_sec()
+        except Exception as e:
+            print(e)
         rate.sleep()

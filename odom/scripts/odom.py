@@ -206,7 +206,7 @@ while not rospy.is_shutdown():
     wheel_vel_msg = String()
     wheel_vel_msg.data = "%s,%s" %(vl_send,vr_send)
     #print(rospy.Time.now().to_sec())
-    print(wheel_vel_msg)
+    #print(wheel_vel_msg)
     wheel_vel_pub.publish(wheel_vel_msg)
 
 

@@ -1,9 +1,9 @@
 TebLocalPlannerROS:
 
  odom_topic: odom
-    
+
  # Trajectory
-  
+
  teb_autosize: True
  dt_ref: 0.5
  dt_hysteresis: 0.1
@@ -11,9 +11,9 @@ TebLocalPlannerROS:
  allow_init_with_backwards_motion: True
  max_global_plan_lookahead_dist: 3.0
  feasibility_check_no_poses: 1
-    
+
  # Robot
-         
+
  max_vel_x: 1
  max_vel_x_backwards: 1
  max_vel_y: 0.0
@@ -39,13 +39,13 @@ TebLocalPlannerROS:
   # vertices: [ [0.20, -0.20], [-0.20, -0.20], [-0.20, 0.20], [0.20, 0.20]] # for type "polygon"
 
  # GoalTolerance
-    
+
  xy_goal_tolerance: 0.3
  yaw_goal_tolerance: 0.7
  free_goal_vel: False
-    
+
  # Obstacles
-    
+
  min_obstacle_dist: 0.2 # This value must also include our robot's expansion, since footprint_model is set to "line".
  include_costmap_obstacles: True
  costmap_obstacles_behind_robot_dist: 1.0
@@ -55,7 +55,7 @@ TebLocalPlannerROS:
  costmap_converter_rate: 5
 
  # Optimization
-    
+
  no_inner_iterations: 5
  no_outer_iterations: 4
  optimization_activate: True

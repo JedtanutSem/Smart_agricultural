@@ -1,22 +1,30 @@
 <launch>
 	<master auto="start"/>
+	<arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
 
 	<param name ="use_sim_time" value="false"/>
-	<arg name="move_forward_only" default="false"/>
-	<arg name="map_file" default="$(find turtlebot3_navigation)/maps/map.yaml"/>
+	<arg name="move_forward_only" default="true"/>
+	<arg name="map_file" default="$(find robot_system)/map/home.yaml"/>
 	<arg name="open_rviz" default="true"/>
-	
+	<arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+
 
 <!--- Start laser scan -->
 
 
 
 <!--- Start arduino python serial interface -->
+<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
 
-	<node pkg="serial_commu" type="serial_str_receive.py" name="ser" respawn="true"/>
+<node pkg="serial_commu" type="serial_str_receive_enc.py" name="wheel_encoder_rick_read"/>
+<!--node pkg="odom" type="odom.py" name="odom"/-->
+
+<node pkg="serial_commu" type="serial_str_arduino.py" name="pwm_to_motor_driver"/>
+<node pkg="robot_system" type="robot_vel_ctrl.py" name="robot_vel_wheel"/>
 
 <!--- Setup tramformation of laser_frame to base_link -->
-	<node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0.08 0 0.09 3.14 0 0  base_link laser_frame 100" />
+	<node pkg="tf" type="static_transform_publisher" name="base_2_laser" args="0 0 0 0 0 0  base_link laser 100" />
 
 <!--- Run odometry setup node -->
 
@@ -32,15 +40,18 @@
 
 <!--- Run move base -->
 
-	<node pkg="move_base" type="move_base" name="move_base" respawn="true"  output="screen">
-	<rosparam file="$(find navi)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
-        <rosparam file="$(find navi)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
-        <rosparam file="$(find navi)/config/local_costmap_params.yaml" command="load" />
-	<rosparam file="$(find navi)/config/global_costmap_params.yaml" command="load" />
-	<rosparam file="$(find navi)/config/move_base_params.yaml" command="load" />
-	<rosparam file="$(find navi)/config/teb_local_planner_params.yaml" command="load" />
-	<param name="TEBPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
-	</node>
+<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+	<param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+	<rosparam file="$(find navi)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
+	<rosparam file="$(find navi)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
+	<rosparam file="$(find navi)/param/local_costmap_params.yaml" command="load" />
+	<rosparam file="$(find navi)/param/global_costmap_params.yaml" command="load" />
+	<rosparam file="$(find navi)/param/move_base_params.yaml" command="load" />
+	<rosparam file="$(find navi)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+	<remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
+	<remap from="odom" to="$(arg odom_topic)"/>
+	<param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+</node>
 
 	<group if="$(arg open_rviz)">
     <node pkg="rviz" type="rviz" name="rviz" required="true"
