@@ -10,6 +10,7 @@ class Pose_Realtime:
         print("******************\n\n")
         print(fail_state)
         print("\n\n******************\n\n")
+
     def pose_save(self,robot_pose_list):
         pose_list = robot_pose_list
         if len(pose_list) == 3:

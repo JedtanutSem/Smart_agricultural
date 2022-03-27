@@ -14,7 +14,9 @@ rate                = 2
 parent_frame        = '/map'
 child_frame         = '/base_footprint'
 
-recov_path          = '/home/agri/agri_ws/src/navigation_system/robot_system/log/recov_state.csv'
+file_path           = '/home/agri/agri_ws/src/navigation_system/robot_system/log/recov_state.csv'
+
+recov_path          = rospy.get_param('recov_path', file_path)
 
 class RT_Pose:
 
