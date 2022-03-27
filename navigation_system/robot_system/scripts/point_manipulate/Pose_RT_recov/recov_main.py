@@ -9,10 +9,10 @@ from robot_msg.msg import State_RobotState
 from robot_pose_tf import Robot_pose_tf
 
 node_name           = 'Pose_RTsave'
-rate                = 2
+rate                = rospy.get_param('rate_RT_Save', 2)
 
-parent_frame        = '/map'
-child_frame         = '/base_footprint'
+parent_frame        = rospy.get_param('parent_frame', '/map')
+child_frame         = rospy.get_param('child_frame' , '/base_footprint')
 
 file_path           = '/home/agri/agri_ws/src/navigation_system/robot_system/log/recov_state.csv'
 
