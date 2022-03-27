@@ -52,7 +52,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    Pwm_controller.msg
    Robot_pose.msg
-   Robot_state.msg
+   State_RobotState.msg
    Wheel_speed_dis.msg
  )
 

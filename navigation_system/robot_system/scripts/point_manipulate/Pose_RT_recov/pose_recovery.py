@@ -10,17 +10,17 @@ class Pose_recovery:
         self.path = path
         self.read_trigger = 0
         #self.recovery_state = 0
-    def recovery_pose(self):
+    def recovery_pose_state(self):
         if self.read_trigger == 0:
             recov_state_dataframe = pd.read_csv(self.path)
             recov_state = recov_state_dataframe.iloc[0][1]
             #print('VAl '+str(recov_state_dataframe.iloc[0][1]))
             if recov_state == 0:
-                print('not recovery')
+                #print('not recovery')
                 self.read_trigger = 1
                 return False
             else:
-                print('recovery')
+                #print('recovery')
                 self.read_trigger = 0
                 return True
         else:
