@@ -2,7 +2,7 @@
 import pandas as pd
 
 class Pose_Realtime:
-    def __init__(self, path='/home/agri/agri_ws/src/navigation_system/robot_system/log/RTlog.csv'):
+    def __init__(self, path='/home/jedtanut/agri_ws/src/navigation_system/robot_system/log/RTlog.csv'):
         self.path = path
         pass
 

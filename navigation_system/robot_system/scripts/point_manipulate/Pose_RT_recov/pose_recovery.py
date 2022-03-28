@@ -1,12 +1,12 @@
 ##!/usr/bin/env python
 import rospy
 import pandas as pd
-from robot_msg.msg import Robot_state
+from robot_msg.msg import State_RobotState
 
 class Pose_recovery:
     def __init__(self,path='/home/agri/agri_ws/src/navigation_system/robot_system/log/recov_state.csv'):
         #rospy.Subscriber('recovery_pose_state', Robot_state, self.recovery_pose_state_clbk)
-        self.pub_recovery = rospy.Publisher('recovery_pose_state',Robot_state,queue_size=10)
+        #self.pub_recovery = rospy.Publisher('recovery_pose_state',State_RobotState,queue_size=10)
         self.path = path
         self.read_trigger = 0
         #self.recovery_state = 0
