@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+import rospy
+from std_msgs.msg import String
+import yaml
+
+param = 0
+
+def talker():
+    global param
+    pub = rospy.Publisher('chatter', String, queue_size=15)
+    rospy.init_node('talker', anonymous=True) #set name of node 
+    rate = rospy.Rate(100) # form 10Hz to 1Hz
+    while not rospy.is_shutdown():
+	param = int(input("What is your param : "))
+	#TIme = "%s" % rospy.get_time()
+        param_str  = "%s" % param
+        read_param()
+        set_param(param)
+        read_param()
+        rospy.loginfo("param : "+ param_str)
+        pub.publish(param)
+        rate.sleep()
+
+def set_param(data_param):
+    data ={'data' : data_param}
+    with open(r'/home/armerous/test_safe_param/param_test.yaml','w') as file:
+        yaml.dump(data,file)
+    
+    
+
+def read_param():
+    with open(r'/home/armerous/test_safe_param/param_test.yaml','rw') as file:
+         documents = yaml.load(file)
+    for item, doc in documents.items():
+        print(item,":",doc) 
+
+if __name__ == '__main__':
+    try:
+        talker()
+        	
+    except rospy.ROSInterruptException:
+        pass
