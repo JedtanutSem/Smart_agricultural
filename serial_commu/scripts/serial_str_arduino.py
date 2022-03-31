@@ -2,14 +2,14 @@
 import serial
 import rospy
 from std_msgs.msg import String
-from robot_msg.msg import Pwm_controller, Robot_state
+from robot_msg.msg import Pwm_controller,  State_RobotState
 import time
 
 arduino_port_name       = '/dev/ttyUSB0'
-psoc_port_name          = '/dev/ttyUSB0'
+psoc_port_name          = '/dev/ttyUSB2'
 baud_rate               = 115200 #set baud for both controller
-serial_timeout          = .1 #in second
-data_refresh_rate       = 10 #hz unit
+serial_timeout          = 1 #in second
+data_refresh_rate       = 100 #hz unit
 
 max_pwm                 = 255 #for check from controller node
 
@@ -18,11 +18,12 @@ psoc_name               = 'PSoC'
 
 class Serial_commu:
     def __init__(self,ser_port_arduino='/dev/ttyUSB0', ser_port_psoc ='/dev/ttyACM0', baud_rate=9600, timeout=.1):
-
+        time.sleep(5)
         rospy.init_node('Serial_node', anonymous=True)
         print('\n\n------Serial node Start!!!------\n\n')
-        rospy.Subscriber('pwm_to_controller', String, self.pwm_get_clbk)
-        rospy.Subscriber('robot_state_data', Robot_state, self.robot_state_data_clbk)
+        rospy.Subscriber('pwm_to_controller', Pwm_controller, self.pwm_get_clbk)
+        rospy.Subscriber('robot_state_data', State_RobotState, self.robot_state_data_clbk)
+        self.pub = rospy.Publisher('serial_read', String, queue_size=1)
 
         self.ser_port_arduino = ser_port_arduino
         self.ser_port_psoc = ser_port_psoc
@@ -76,26 +77,35 @@ class Serial_commu:
         #print(pwm_get)
 
     def serial_read(self):
-        psoc_read = self.psoc.readline()[:-2]
-        print(psoc_read)
+        psoc_read   = self.psoc.readline()[:-2]
+        msg         = String()
+        msg.data    = psoc_read
+        self.pub.publish(psoc_read)
+        #print('PSoC Read:'+str(msg))
 
     def serial_write(self):
         try:
-            if(self.pwmL or self.pwmR <= max_pwm):
-                if self.fail_state == 1:
+            #if(self.pwmL or self.pwmR <= max_pwm or True):
+            if(True):
+                #if self.fail_state == 1:
+                if False:
                     str_write = '%s,%s,%s,%s\n' %(0,0,0,0)
                     self.fail_print_without_exit('Robot fail')
                 else:
                     str_write = '%s,%s,%s,%s\n' %(self.pwmL,self.dirL,
-                                            self.pwmL,self.dirR)
+                                            self.pwmR,self.dirR)
+                    #str_write = '%s,%s,%s,%s\n' %(0,0,
+                                            #0,0)
                     self.arduino.write(str_write)
             else:
                 self.fail_print_with_exit('PWM value Fail. Please check value from PWM node!!!!!',
                                             'Arduino')
 
-        except AttributeError:
-            self.fail_print_with_exit('Please check all node required',
+
+        except Exception as e_ser_write:
+            self.fail_print_with_exit(e_ser_write,
                                         'Arduino')
+
 
         except Exception as e_ser_write:
             self.fail_print_with_exit(e_ser_write

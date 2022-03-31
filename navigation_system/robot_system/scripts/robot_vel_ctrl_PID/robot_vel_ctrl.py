@@ -3,6 +3,7 @@
 import time
 import rospy
 from std_msgs.msg import String
+from robot_msg.msg import Pwm_controller
 from geometry_msgs.msg import Twist
 
 
@@ -59,7 +60,8 @@ def drive_pwm(target_velocity_left,target_velocity_right):
 
     if pwm_right > 255 : pwm_right = 255
     if target_velocity_right > 0 : direction_right = 1
-    pwm = str(pwm_left)+","+str(direction_left)+","+str(pwm_right)+","+str(direction_right)
+    #pwm = str(pwm_left)+","+str(direction_left)+","+str(pwm_right)+","+str(direction_right)
+    pwm = [pwm_left,direction_left,pwm_right,direction_right]
     return pwm
 
 def cmd_vel_clbk(data):
@@ -68,6 +70,7 @@ def cmd_vel_clbk(data):
     ang_z = data.angular.z
     targetvelocity_left = vel_x - ang_z*(wheelbase/2)
     targetvelocity_right = vel_x + ang_z*(wheelbase/2)
+    #print(targetvelocity_left)
 
 
 def wheel_vel_clbk(data):
@@ -140,7 +143,7 @@ if __name__ == "__main__":
     rospy.init_node('robot_vel_PID', anonymous=True)
     rospy.Subscriber('wheel_vel', String, wheel_vel_clbk)
     rospy.Subscriber('cmd_vel', Twist, cmd_vel_clbk)
-    pub_pwm = rospy.Publisher('pwm_to_controller', String, queue_size = 10)
+    pub_pwm = rospy.Publisher('pwm_to_controller', Pwm_controller, queue_size = 10)
     #current_time = rospy.Time.now().to_sec()
     #past_time = rospy.Time.now().to_sec()
     #loop_time = rospy.Time.now().to_sec()
@@ -155,8 +158,13 @@ if __name__ == "__main__":
         #delta_time = current_time - past_time
         #past_time = current_time
 
-        pwm_msg = String()
-        pwm_msg.data = drive_pwm(targetvelocity_left,targetvelocity_right)
+        pwm_msg = Pwm_controller()
+        pwm_data = drive_pwm(targetvelocity_left,targetvelocity_right)
+        pwm_msg.pwmL = pwm_data[0]
+        pwm_msg.dirL = pwm_data[1]
+        pwm_msg.pwmR = pwm_data[2]
+        pwm_msg.dirR = pwm_data[3]
+
         pub_pwm.publish(pwm_msg)
 
         #if True :

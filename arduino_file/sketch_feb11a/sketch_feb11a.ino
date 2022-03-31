@@ -20,7 +20,7 @@ int direction_right_pin = LOW ;
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   pinMode(motor_left_pin,OUTPUT);
   pinMode(motor_right_pin,OUTPUT);
   pinMode(pwm_left_pin,OUTPUT);

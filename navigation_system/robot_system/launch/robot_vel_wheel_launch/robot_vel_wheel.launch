@@ -1,8 +1,8 @@
 <launch>
-  <node pkg="serial_commu" type="serial_str_receive_enc.py" name="wheel_encoder_rick_read"/>
   <node pkg="odom" type="odom.py" name="odom"/>
-
-  <node pkg="serial_commu" type="serial_str_arduino.py" name="pwm_to_motor_driver"/>
+  <node pkg="robot_system" type="robot_vel_ctrl.py" name="wheel_vel_PID_control" />
+  <node pkg="serial_commu" type="serial_str_arduino.py" name="pwm_to_motor_driver" output="screen"/>
+  <include file="$(find turtlebot3_teleop)/launch/turtlebot3_teleop_key.launch" />
   <!--node pkg="robot_system" type="robot_vel_PID.py" name="wheel_vel_PID_control" output="screen"/-->
-  <node pkg="robot_system" type="robot_vel_ctrl.py" name="wheel_vel_PID_control" output="screen"/>
+
 </launch>

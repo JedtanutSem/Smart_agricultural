@@ -1,6 +1,7 @@
 <launch>
    <arg name="slam_methods" default="hector"/>
    <arg name="open_rviz" default="true"/>
+   <node pkg="tf" type="static_transform_publisher" name="map_nav_broadcaster" args="0 0 1 0 0 0 base_link laser 100"/>
 
    <!-- slam_methods -->
    <include file="$(find robot_system)/launch/$(arg slam_methods)_slam.launch"/>
@@ -10,5 +11,6 @@
      <node pkg="rviz" type="rviz" name="rviz" required="true"
            args="-d $(find robot_system)/rviz/hector_slam.rviz"/>
    </group>
+
 
 </launch>
